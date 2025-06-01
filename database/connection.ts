@@ -9,7 +9,7 @@ const  sequelize= new Sequelize({
       dialect:"mysql",
      host:process.env.DB_HOST,// dadta base ko location  kaha xa vaney kura localhost (MYCOMPUTER)
      port:Number(process.env.DB_PORT),
-     models:[__dirname+'./models']
+     models:[__dirname+'/models']
 
 })
 sequelize.authenticate()
