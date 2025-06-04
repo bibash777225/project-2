@@ -4,7 +4,7 @@ config()
 
 //databse connection import
 //imoport garena vane connect hhudainah or file execute hudhainah
-import"./database/connection"
+import"./src/database/connection"
 function startServer(){
     const port =process.env.PORT
     app.listen(port,function(){
