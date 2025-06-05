@@ -26,7 +26,8 @@ type:DataType.STRING
 
     declare password:string
      @Column({
-        type:DataType.STRING
+        type:DataType.STRING,
+        unique:true
     })
 
     declare email:string

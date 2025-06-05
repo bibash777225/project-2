@@ -17,31 +17,61 @@ RESET PASSWORD/OTP
 // two apprpach xa funtional based mah orr op type
  import{Request,Response}from "express"
 import User from "../../../database/models/user.model"
-const registerUser = async(req:Request,res:Response)=>{
-    // const username=req.body.username
-    // const email=req.body.email
-    // const password=req.body.password or simply destrucure
-    const{username,password,email}=req.body
-    // kunai miss hunu vayenah sabaii data ayunnu paryou
-    if(!username|| !password|| !email){
+import bcrypt from"bcrypt"
+// const registerUser = async(req:Request,res:Response)=>{
+//     // const username=req.body.username
+//     // const email=req.body.email
+//     // const password=req.body.password or simply destrucure
+//     const{username,password,email}=req.body
+//     // kunai miss hunu vayenah sabaii data ayunnu paryou
+//     if(!username|| !password|| !email){
+//      res.status(400).json({
+//         message:"please provide username, password,email"
+//      })
+//      return  // like else mathi ko vo baney yeha nai stop nabaye muni ko executed hunxa
+//     } 
+//   //inset into user table 
+//    await User.create({
+//     username:username,
+//     password:password,
+//     email:email,
+
+//   })
+//   res.status(200).json({
+//     message:" gareko  kura pura voo hjr ko"
+//   })
+
+     
+    
+
+// }//FUnction
+// export {registerUser}
+class AuthController{
+    static async registerUser(req:Request,res:Response){
+        if(req.body==undefined){
+            console.log("tiggred")
+            res.status(400).json({
+                message:"no data sent !!"
+            })
+            return
+        }
+        const {username,password,email}=req.body
+         if(!username|| !password|| !email){
      res.status(400).json({
         message:"please provide username, password,email"
      })
      return  // like else mathi ko vo baney yeha nai stop nabaye muni ko executed hunxa
     } 
-  //inset into user table 
-   await User.create({
+      //insert into user table  
+      await User.create({
     username:username,
-    password:password,
+    password: bcrypt.hashSync(password,8),
     email:email,
 
   })
-  res.status(200).json({
+  res.status(201).json({
     message:" gareko  kura pura voo hjr ko"
   })
-
-     
-    
-
-}//FUnction
-export {registerUser}
+    }
+}
+export default AuthController
