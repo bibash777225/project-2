@@ -46,6 +46,14 @@ import bcrypt from"bcrypt"
 
 // }//FUnction
 // export {registerUser}
+/*
+login flow 
+email/username,password(basic)
+email,password--data accept-->validation-->
+//first check wmail exits or not (werify)--yes--checkpassword--now--not register
+gogle login,fb,github,(auth)
+email login (ssd)
+*/
 class AuthController{
     static async registerUser(req:Request,res:Response){
         if(req.body==undefined){
@@ -72,6 +80,40 @@ class AuthController{
   res.status(201).json({
     message:" gareko  kura pura voo hjr ko"
   })
+    }
+   async loginUser(req:Request,res:Response){
+      const{email,password}=req.body
+      if(!email|| !password){
+        res.status(201).json({
+          message:"please provide email,password "
+        })
+        return
+      }
+      //check if email exits or npt in our table 
+      await User.findAll({
+        where:{
+          email:email
+        }
+      })
+      //array return garxa always
+      if(data.length==0){
+        res.status(404).json({
+          message:"not registered"
+        })
+      }else{
+        //check password ,neoal123  -->hashconversion->
+        //passeord hash form mah basya xa so 
+        //comapre(plain password user bata akoo password,hasg password register hudha )
+       const isPassswordMatch= bcrypt.compareSync(password, data[0].password) 
+ if(isPassswordMatch){
+  //login vayou token generation
+  
+ }else{
+  res.status(401).json({
+    message:"Invalid email or password"
+  })
+ }
+      }
     }
 }
 export default AuthController
