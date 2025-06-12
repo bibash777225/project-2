@@ -18,6 +18,7 @@ RESET PASSWORD/OTP
  import{Request,Response}from "express"
 import User from "../../../database/models/user.model"
 import bcrypt from"bcrypt"
+import jwt from "jsonwebtoken"
 // const registerUser = async(req:Request,res:Response)=>{
 //     // const username=req.body.username
 //     // const email=req.body.email
@@ -81,20 +82,29 @@ class AuthController{
     message:" gareko  kura pura voo hjr ko"
   })
     }
-   async loginUser(req:Request,res:Response){
+   static async loginUser(req:Request,res:Response){
       const{email,password}=req.body
       if(!email|| !password){
-        res.status(201).json({
+        res.status(401).json({
           message:"please provide email,password "
         })
         return
       }
       //check if email exits or npt in our table 
-      await User.findAll({
+       const data=await User.findAll({
         where:{
           email:email
         }
       })
+      /*
+      email:"bibashghimire000@gamil.com"
+      username:"bibash"
+      password:"jksjdfia23443"
+
+      data[0].password taney tarika 
+      data[1].haha
+      */
+     
       //array return garxa always
       if(data.length==0){
         res.status(404).json({
@@ -105,8 +115,17 @@ class AuthController{
         //passeord hash form mah basya xa so 
         //comapre(plain password user bata akoo password,hasg password register hudha )
        const isPassswordMatch= bcrypt.compareSync(password, data[0].password) 
- if(isPassswordMatch){
+
+    if(isPassswordMatch){
   //login vayou token generation
+   const token = jwt.sign({ id: data[0].id },"this_is_secret", // ideally use process.env.JWT_SECRET
+  { 
+    expiresIn: "30d"
+   }); //unique kura k xa tei lukauney
+   res.status(200).json({
+    token:token,
+    message:"login succesfully"
+   })
   
  }else{
   res.status(401).json({
