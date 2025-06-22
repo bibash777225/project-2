@@ -1,20 +1,16 @@
 import { Request,Response } from "express";
 import sequelize from "../../database/connection";
 import generateRandomInstituteNumber from "../../../services/generateRandomInstituteNumber";
+import { IExtendRequest } from "../../middleware/type";
 
-interface IExtendRequest extends Request{
-    User?:{   
-      name:string,
-    age:number,   
-    }  
-}
+
 
 
 
 
 class InstituteController{
    static async createInstitute(req:IExtendRequest,res:Response){
-      console.log(req.User && req.User.name,"name from middleware")
+      console.log(req.User,"name from middleware")
    const{instituteName,instituteEmail,institutePhoneNumber,instituteAddress}=req.body
 
    const {instituteVatNO}=req.body ||null

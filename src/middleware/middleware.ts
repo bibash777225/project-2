@@ -1,13 +1,8 @@
 import { NextFunction, Request,Response } from "express"
 import User from "../database/models/user.model"
 import   jwt from "jsonwebtoken"
-interface IExtendRequest extends Request{
-    User?:{   
-      email:string,
-    role:string, 
-    username:string |null
-    }  
-}
+import { IExtendRequest } from "./type"
+
 
 
 class Middleware{
@@ -46,7 +41,7 @@ const UserData= await User.findByPk(resultaayo.id)
     }
     else{
         console.log("succesfully verified")
-        
+
         req.User=UserData
 
     }
