@@ -1,7 +1,8 @@
-import { Request,Response } from "express";
+import { NextFunction, Request,Response } from "express";
 import sequelize from "../../database/connection";
 import generateRandomInstituteNumber from "../../../services/generateRandomInstituteNumber";
 import { IExtendRequest } from "../../middleware/type";
+import User from "../../database/models/user.model";
 
 
 
@@ -9,7 +10,7 @@ import { IExtendRequest } from "../../middleware/type";
 
 
 class InstituteController{
-   static async createInstitute(req:IExtendRequest,res:Response){
+   static async createInstitute(req:IExtendRequest,res:Response,next:NextFunction){
       console.log(req.User,"name from middleware")
    const{instituteName,instituteEmail,institutePhoneNumber,instituteAddress}=req.body
 
@@ -44,12 +45,26 @@ updatedAt   TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 replacements:[instituteName,instituteEmail,institutePhoneNumber,instituteAddress,institutePanNO,instituteVatNO]
  })
 
- await sequelize.query(`CREATE TABLE IF NOT EXISTS institute_${instituteNumber}_teacher(
- id INT NOT NULL PRIMARY KEY  AUTO_INCREMENT,
- teacherName VARCHAR(255) NOT NULL,
-teacherEmail VARCHAR(255) NOT NULL,
-teacherPhoneNumber  VARCHAR(255) NOT NULL UNIQUE
-    )`)
+
+ if (req.User){
+   await User.update({
+      currentInstitute:instituteNumber
+   },{
+      where:{
+         id:req.User.id
+      }
+   }
+   next()
+)
+
+
+ }
+//  await sequelize.query(`CREATE TABLE IF NOT EXISTS institute_${instituteNumber}_teacher(
+//  id INT NOT NULL PRIMARY KEY  AUTO_INCREMENT,
+//  teacherName VARCHAR(255) NOT NULL,
+// teacherEmail VARCHAR(255) NOT NULL,
+// teacherPhoneNumber  VARCHAR(255) NOT NULL UNIQUE
+//     )`)
 
  res.status(201).json({
     message:" institute created!"
