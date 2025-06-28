@@ -54,9 +54,14 @@ replacements:[instituteName,instituteEmail,institutePhoneNumber,instituteAddress
          id:req.User.id
       }
    }
-   next()
+   next();
 )
-
+  await sequelize.query(`CREATE TABLE IF NOT EXISTS institute_${instituteNumber}_teacher(
+// //  id INT NOT NULL PRIMARY KEY  AUTO_INCREMENT,
+// //  teacherName VARCHAR(255) NOT NULL,
+// // teacherEmail VARCHAR(255) NOT NULL,
+// // teacherPhoneNumber  VARCHAR(255) NOT NULL UNIQUE
+// //     )`)
 
  }
 //  await sequelize.query(`CREATE TABLE IF NOT EXISTS institute_${instituteNumber}_teacher(
